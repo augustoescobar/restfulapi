@@ -1,0 +1,17 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:mysql://localhost:3306/restfulapi
+    username: root
+    password: root
+app:
+  api:
+    list:
+      paging:
+        defaultSize: 20
+        defaultPage: 0
+      sorting:
+        defaultDirection: ASC
+        defaultProperty: id
