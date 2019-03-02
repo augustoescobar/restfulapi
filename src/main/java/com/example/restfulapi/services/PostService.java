@@ -23,7 +23,7 @@ public class PostService {
         return postRepository.findAll(pageable);
     }
 
-    public Page<Post> findAllByTitle(String title, Pageable pageable) {
+    public Page<Post> findAllByTitleContaining(String title, Pageable pageable) {
 
         return postRepository.findAllByTitleContaining(title, pageable);
     }
