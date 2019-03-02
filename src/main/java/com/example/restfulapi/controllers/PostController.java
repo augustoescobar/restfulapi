@@ -6,6 +6,7 @@ import com.example.restfulapi.entities.Post;
 import com.example.restfulapi.services.MappingService;
 import com.example.restfulapi.services.PostService;
 import com.example.restfulapi.validators.PostValidator;
+import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping(value = "/post", produces = MediaType.APPLICATION_JSON_VALUE)
+@Api(value = "Post", description = "REST API for Post", tags = { "Post" })
 public class PostController {
 
     private Logger logger = LoggerFactory.getLogger(PostController.class);
@@ -59,10 +61,10 @@ public class PostController {
         return ResponseEntity.ok(responseDTO);
     }
 
-    @GetMapping("/{postId}")
-    public ResponseEntity<Post> get(@PathVariable(name = "postId") Integer postId) {
+    @GetMapping("/{id}")
+    public ResponseEntity<Post> get(@PathVariable(name = "id") Integer id) {
 
-        Post post = postService.findById(postId);
+        Post post = postService.findById(id);
 
         URI uri = ControllerLinkBuilder.linkTo(PostController.class).slash(post.getId()).toUri();
 
