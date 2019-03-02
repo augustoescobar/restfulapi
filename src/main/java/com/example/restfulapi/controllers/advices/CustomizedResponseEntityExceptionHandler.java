@@ -1,4 +1,4 @@
-package com.example.restfulapi.controllers;
+package com.example.restfulapi.controllers.advices;
 
 import com.example.restfulapi.dtos.ArgumentNotValidDTO;
 import com.example.restfulapi.dtos.FieldErrorDTO;

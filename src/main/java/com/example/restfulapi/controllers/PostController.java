@@ -21,7 +21,7 @@ import java.net.URI;
 @RestController
 @RequestMapping(value = "/post", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PostController {
-
+    
     private PostService postService;
     private MappingService mappingService;
 
