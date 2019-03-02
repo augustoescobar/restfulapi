@@ -21,6 +21,16 @@ dependencies {
 	implementation 'org.springframework.hateoas:spring-hateoas:0.25.1.RELEASE'
 	implementation 'io.springfox:springfox-swagger2:2.9.2'
 	implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+
+	// logging
 	implementation 'net.logstash.logback:logstash-logback-encoder:5.3'
+	implementation 'ch.qos.logback:logback-core:1.2.3'
+	implementation 'ch.qos.logback:logback-classic:1.2.3'
+	implementation 'ch.qos.logback:logback-access:1.2.3'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+bootRun {
+	args = ["--spring.profiles.active=local"]
 }

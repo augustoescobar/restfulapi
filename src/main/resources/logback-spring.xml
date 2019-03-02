@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+
+    <!--<jmxConfigurator />-->
+
+    <!--<shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>-->
+
+    <appender name="stash" class="net.logstash.logback.appender.LoggingEventAsyncDisruptorAppender">
+        <ringBufferSize>1048576</ringBufferSize>
+
+        <appender class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+            <destination>localhost:5000</destination>
+            <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+                <providers>
+                    <mdc/>
+                    <pattern>
+                        <pattern>
+                            {
+                            "timestamp": "%d{yyyy-MM-dd'T'HH:mm:ss.SSSZZ}",
+                            "message": "%message",
+                            "logger": "%logger",
+                            "thread": "%thread",
+                            "level": "%level",
+                            "host": "${HOSTNAME}",
+                            "env": "${spring.profiles.active}",
+                            "app": "posts-api"
+                            }
+                        </pattern>
+                    </pattern>
+                    <stackTrace>
+                        <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+                            <maxDepthPerThrowable>30</maxDepthPerThrowable>
+                            <maxLength>4096</maxLength>
+                            <shortenedClassNameLength>20</shortenedClassNameLength>
+                            <rootCauseFirst>true</rootCauseFirst>
+                        </throwableConverter>
+                    </stackTrace>
+                </providers>
+            </encoder>
+        </appender>
+    </appender>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.example.restfulapi" level="info" />
+
+    <root level="ERROR">
+        <appender-ref ref="stash" />
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>

@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: ${LEVEL:local}
   jpa:
     hibernate:
       ddl-auto: update

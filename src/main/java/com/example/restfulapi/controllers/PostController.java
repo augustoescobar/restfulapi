@@ -6,6 +6,8 @@ import com.example.restfulapi.entities.Post;
 import com.example.restfulapi.services.MappingService;
 import com.example.restfulapi.services.PostService;
 import com.example.restfulapi.validators.PostValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +23,9 @@ import java.net.URI;
 @RestController
 @RequestMapping(value = "/post", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PostController {
-    
+
+    private Logger logger = LoggerFactory.getLogger(PostController.class);
+
     private PostService postService;
     private MappingService mappingService;
 
@@ -41,6 +45,8 @@ public class PostController {
 
     @GetMapping
     public ResponseEntity<ListPostsResponseDTO> list(ListPostsRequestDTO requestDTO) {
+
+        logger.info("listing posts...");
 
         Pageable pageable = mappingService.toPageRequest(requestDTO);
 
