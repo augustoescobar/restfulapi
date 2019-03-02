@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="30 seconds">
 
-    <!--<jmxConfigurator />-->
+    <springProperty scope="context" name="ACTIVE_PROFILE" source="spring.profiles.active"/>
 
-    <!--<shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>-->
+    <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
 
     <appender name="stash" class="net.logstash.logback.appender.LoggingEventAsyncDisruptorAppender">
         <ringBufferSize>1048576</ringBufferSize>
@@ -22,7 +22,7 @@
                             "thread": "%thread",
                             "level": "%level",
                             "host": "${HOSTNAME}",
-                            "env": "${spring.profiles.active}",
+                            "env": "${ACTIVE_PROFILE}",
                             "app": "posts-api"
                             }
                         </pattern>
