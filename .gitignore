@@ -26,4 +26,5 @@ HELP.md
 /nbdist/
 /.nb-gradle/
 
-/infra/elk/data
+/infra/elk/elasticsearch/data/
+/infra/elk/kibana/data/

@@ -6,6 +6,7 @@ import com.example.restfulapi.entities.Post;
 import com.example.restfulapi.services.MappingService;
 import com.example.restfulapi.services.PostService;
 import com.example.restfulapi.validators.PostValidator;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,13 +43,12 @@ public class PostController {
 
     @InitBinder("post")
     protected void postInitBinder(WebDataBinder binder) {
+
         binder.addValidators(new PostValidator());
     }
 
     @GetMapping
     public ResponseEntity<ListPostsResponseDTO> list(ListPostsRequestDTO requestDTO) {
-
-        logger.info("listing posts...");
 
         Pageable pageable = mappingService.toPageRequest(requestDTO);
 
@@ -58,6 +58,8 @@ public class PostController {
 
         ListPostsResponseDTO responseDTO = mappingService.toListResponseDTO(postsPage, ListPostsResponseDTO.class);
 
+        logger.info("[PostController::list] listing posts by query string " + mappingService.toJson(requestDTO) + ": " + mappingService.toJson(responseDTO));
+
         return ResponseEntity.ok(responseDTO);
     }
 
@@ -66,33 +68,88 @@ public class PostController {
 
         Post post = postService.findById(id);
 
-        URI uri = ControllerLinkBuilder.linkTo(PostController.class).slash(post.getId()).toUri();
+        if (post == null) {
 
-        return ResponseEntity.created(uri).body(post);
+            logger.info("[PostController::get] no post found with id " + id);
+
+            return ResponseEntity.notFound().build();
+        }
+
+        logger.info("[PostController::get] post found with id " + id + ": " + mappingService.toJson(post));
+
+        return ResponseEntity.ok(post);
     }
 
     @PostMapping
     public ResponseEntity<Post> add(@RequestBody @Valid Post post) {
 
-        postService.save(post);
+        try {
 
-        return ResponseEntity.ok(post);
+            postService.save(post);
+        } catch (Exception e) {
+
+            logger.error("[PostController::add] Failed to save new post in database: " + mappingService.toJson(post), e);
+
+            throw e;
+        }
+
+        logger.info("[PostController::add] saving new post saved into database: " + mappingService.toJson(post));
+
+        URI uri = ControllerLinkBuilder.linkTo(PostController.class).slash(post.getId()).toUri();
+
+        return ResponseEntity.created(uri).body(post);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Post> update(@PathVariable(name = "id", required = false) Integer id, @RequestBody @Valid Post post) {
 
+        Post oldPost = postService.findById(id);
+
+        if (oldPost == null) {
+
+            logger.warn("[PostController::update] no post found with id " + id);
+
+            return ResponseEntity.notFound().build();
+        }
+
         post.setId(id);
 
-        postService.save(post);
+        try {
+
+            postService.save(post);
+        } catch (Exception e) {
+
+            logger.error("[PostController::update] Failed to update post in database: " + mappingService.toJson(post), e);
+
+            throw e;
+        }
+
+        logger.info("[PostController::update] post information updated: { \"old\": " + mappingService.toJson(oldPost) + ", \"new\": " + mappingService.toJson(post) + " }");
 
         return ResponseEntity.ok(post);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable(name = "id") Integer postId) {
+    public ResponseEntity<Void> delete(@PathVariable(name = "id") Integer id) {
 
-        postService.delete(postId);
+        Post post = postService.findById(id);
+
+        if (post == null) {
+
+            logger.warn("[PostController::delete] no post found with id " + id);
+
+            return ResponseEntity.notFound().build();
+        }
+
+        try {
+
+            postService.delete(post);
+        } catch (Exception e) {
+
+            logger.error("[PostController::delete] Failed to delete post: " + mappingService.toJson(post), e);
+        }
+
+        logger.info("[PostController::delete] post with id " + id + " deleted successfully");
 
         return ResponseEntity.noContent().build();
     }

@@ -2,6 +2,11 @@ package com.example.restfulapi.services;
 
 import com.example.restfulapi.dtos.AbstractListRequestDTO;
 import com.example.restfulapi.dtos.AbstractListResponseDTO;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +19,8 @@ import java.util.Optional;
 @Service
 public class MappingService {
 
+    private Logger logger = LoggerFactory.getLogger(MappingService.class);
+
     @Value("${app.api.list.paging.defaultSize}")
     private Integer defaultPageSize;
 
@@ -25,6 +32,9 @@ public class MappingService {
 
     @Value("${app.api.list.sorting.defaultProperty}")
     private String defaultSortProperty;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     public <T extends AbstractListRequestDTO> Pageable toPageRequest(T requestDTO) {
         return PageRequest.of(
@@ -51,5 +61,18 @@ public class MappingService {
         }
 
         return null;
+    }
+
+    public <T> String toJson(T obj) {
+
+        try {
+
+            return objectMapper.writeValueAsString(obj);
+        } catch (JsonProcessingException e) {
+
+            logger.error("[MappingService#toJson] Failed to convert object into json: ", e);
+
+            return null;
+        }
     }
 }
