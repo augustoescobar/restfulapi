@@ -6,7 +6,6 @@ import com.example.restfulapi.entities.Post;
 import com.example.restfulapi.services.MappingService;
 import com.example.restfulapi.services.PostService;
 import com.example.restfulapi.validators.PostValidator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
