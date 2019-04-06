@@ -8,11 +8,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-public class Post {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+public class Post extends AbstractEntity {
 
     @NotNull
     @Size(min = 2, message = "must have at least 2 characters")
@@ -21,27 +17,6 @@ public class Post {
 
     @NotNull
     private String content;
-
-    public Post() { }
-
-    public Post(Integer id, String title, String content) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-    }
-
-    public Post(String title, String content) {
-        this.title = title;
-        this.content = content;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;

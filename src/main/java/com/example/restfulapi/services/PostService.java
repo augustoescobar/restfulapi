@@ -18,6 +18,11 @@ public class PostService {
         this.postRepository = postRepository;
     }
 
+    public Long count() {
+
+        return this.postRepository.count();
+    }
+
     public Page<Post> findAll(Pageable pageable) {
 
         return postRepository.findAll(pageable);
@@ -28,7 +33,7 @@ public class PostService {
         return postRepository.findAllByTitleContaining(title, pageable);
     }
 
-    public Post findById(Integer id) {
+    public Post findById(Long id) {
 
         return postRepository.findById(id).orElse(null);
     }

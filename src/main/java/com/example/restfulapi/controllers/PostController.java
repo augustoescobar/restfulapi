@@ -64,7 +64,7 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Post> get(@PathVariable(name = "id") Integer id) {
+    public ResponseEntity<Post> get(@PathVariable(name = "id") Long id) {
 
         Post post = postService.findById(id);
 
@@ -101,7 +101,7 @@ public class PostController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Post> update(@PathVariable(name = "id", required = false) Integer id, @RequestBody @Valid Post post) {
+    public ResponseEntity<Post> update(@PathVariable(name = "id", required = false) Long id, @RequestBody @Valid Post post) {
 
         Post oldPost = postService.findById(id);
 
@@ -130,7 +130,7 @@ public class PostController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable(name = "id") Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable(name = "id") Long id) {
 
         Post post = postService.findById(id);
 
