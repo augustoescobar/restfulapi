@@ -81,6 +81,14 @@ public class Bootstrap {
             user.setAuthorities(authorityService.findAll());
 
             userService.save(user);
+
+            user = new User();
+            user.setEnabled(true);
+            user.setUsername("admin2");
+            user.setPassword(userService.encodePassword("1234"));
+            user.setAuthorities(authorityService.findAll());
+
+            userService.save(user);
         }
     }
 }
